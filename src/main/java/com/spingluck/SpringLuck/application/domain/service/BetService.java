@@ -25,7 +25,7 @@ public class BetService implements BetUseCase {
     }
 
     @Override
-    public Optional<Bet> getBetById(Long id) {
+    public Optional<Bet> getBetById(int id) {
         return betPort.findById(id);
     }
 }

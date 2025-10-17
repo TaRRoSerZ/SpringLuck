@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface BetUseCase {
     void placeBet(Bet bet);
     Optional<List<Bet>> getAllBets();
-    Optional<Bet> getBetById(Long id);
+    Optional<Bet> getBetById(int id);
 }

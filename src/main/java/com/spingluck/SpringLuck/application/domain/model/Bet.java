@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Bet {
 
-    private Long id;
+    private int id;
     private Double amount;
     private Date date;
     private Boolean isWinningBet;

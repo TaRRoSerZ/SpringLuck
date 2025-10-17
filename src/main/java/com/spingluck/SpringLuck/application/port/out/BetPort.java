@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface BetPort {
     void save(Bet bet);
-    Optional<Bet> findById(Long id);
+    Optional<Bet> findById(int id);
     Optional<List<Bet>> findAll();
 }
