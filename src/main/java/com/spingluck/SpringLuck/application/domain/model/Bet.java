@@ -1,14 +1,17 @@
 package com.spingluck.SpringLuck.application.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter @Setter
+@AllArgsConstructor
 public class Bet {
-    private Long id;
-    private Long userId;
+
+    private int id;
     private Double amount;
-    private String game;
-    private BetStatus status ;
-    private Double gain;
+    private Date date;
+    private Boolean isWinningBet;
 }
