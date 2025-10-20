@@ -1,0 +1,79 @@
+openapi: "3.1.0"
+info:
+  title: "SpringLuckBack API"
+  description: "SpringLuckBack API"
+  version: "1.0.0"
+servers:
+  - url: "https://SpringLuckBack"
+paths:
+  /bets:
+    get:
+      summary: "GET bets"
+      operationId: "getALlBets"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Bet"
+  /bets/{id}:
+    get:
+      summary: "GET bets/{id}"
+      operationId: "getBetById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Bet"
+  /bets/place:
+    post:
+      summary: "POST bets/place"
+      operationId: "placeBet"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Bet"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+components:
+  schemas:
+    Bet:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+          nullable: true
+        amount:
+          type: "number"
+          format: "double"
+          nullable: true
+        date:
+          type: "string"
+          format: "date-time"
+          nullable: true
+        isWinningBet:
+          type: "boolean"
+          nullable: true
+    Void:
+      type: "object"
+      properties: { }
