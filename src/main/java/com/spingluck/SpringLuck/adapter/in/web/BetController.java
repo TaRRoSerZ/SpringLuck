@@ -2,6 +2,7 @@ package com.spingluck.SpringLuck.adapter.in.web;
 
 import com.spingluck.SpringLuck.application.domain.model.Bet;
 import com.spingluck.SpringLuck.application.port.in.BetUseCase;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +13,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/bets")
+@AllArgsConstructor
 public class BetController {
 
+    @Autowired
     private final BetUseCase betService;
 
-    @Autowired
-    public BetController(BetUseCase betService){
-        this.betService = betService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Bet>> getALlBets(){

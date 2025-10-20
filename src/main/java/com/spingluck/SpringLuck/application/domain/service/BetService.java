@@ -4,6 +4,7 @@ import com.spingluck.SpringLuck.application.domain.model.Bet;
 import com.spingluck.SpringLuck.application.port.in.BetUseCase;
 import com.spingluck.SpringLuck.application.port.out.BetPort;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
