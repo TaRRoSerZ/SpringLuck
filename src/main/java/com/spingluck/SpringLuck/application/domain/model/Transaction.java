@@ -9,10 +9,9 @@ import java.util.Date;
 @Getter @Setter
 @AllArgsConstructor
 public class Transaction {
-
     private int id;
     private Double amount;
-    private Bet bet;
+    private Bet bet = null;
     private TransactionType type;
     private Date date;
 }

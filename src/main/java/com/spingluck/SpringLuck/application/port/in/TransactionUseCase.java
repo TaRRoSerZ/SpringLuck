@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TransactionUseCase {
 
-    Optional<Transaction> createTransaction(double amount, Bet bet, TransactionType type);
+    Optional<Transaction> createTransaction(Transaction transaction);
     Optional<List<Transaction>> getAllTransactions();
     Optional<Transaction> getTransactionById(int id);
 }

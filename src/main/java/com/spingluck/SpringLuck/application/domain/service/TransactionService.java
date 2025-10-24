@@ -18,8 +18,8 @@ public class TransactionService implements TransactionUseCase {
 
 
     @Override
-    public Optional<Transaction> createTransaction(double amount, Bet bet, TransactionType type) {
-        return transactionPort.save(amount, bet, type);
+    public Optional<Transaction> createTransaction(Transaction transaction) {
+        return transactionPort.save(transaction);
     }
 
     @Override
