@@ -15,3 +15,4 @@ public class Bet {
     private Date date;
     private Boolean isWinningBet;
 }
+

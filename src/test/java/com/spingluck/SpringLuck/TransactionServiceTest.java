@@ -66,8 +66,8 @@ public class TransactionServiceTest {
         TransactionPort transactionPortStub = mock(TransactionPort.class);
 
         TransactionUseCase transactionService = new TransactionService(transactionPortStub);
-        transactionService.createTransaction(t1.getAmount(), t1.getBet(), t1.getType());
-        verify(transactionPortStub).save(t1.getAmount(), t1.getBet(), t1.getType());
+        transactionService.createTransaction(t1);
+        verify(transactionPortStub).save(t1);
 
     }
 }

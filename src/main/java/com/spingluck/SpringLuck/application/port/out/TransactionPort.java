@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TransactionPort {
-    Optional<Transaction> save(double amount, Bet bet, TransactionType type);
+    Optional<Transaction> save(Transaction transaction);
     Optional<Transaction> findById(int id);
     Optional<List<Transaction>> findAll();
 }
