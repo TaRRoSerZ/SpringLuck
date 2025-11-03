@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface TransactionPort {
     Optional<Transaction> save(Transaction transaction);
+    Optional<List<Transaction>> findTransactionsByUserId(UUID id);
     Optional<Transaction> findById(UUID id);
     Optional<List<Transaction>> findAll();
 }
