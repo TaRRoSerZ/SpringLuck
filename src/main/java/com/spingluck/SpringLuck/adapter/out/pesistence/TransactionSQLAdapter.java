@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @AllArgsConstructor
@@ -19,15 +20,15 @@ public class TransactionSQLAdapter implements TransactionPort {
     @Override
     @Transactional
     public Optional<Transaction> save(Transaction transaction) {
-        String sqlQuery = "INSERT INTO transactions (amount, betId, type, date) VALUES (?, ?, ?, ?);";
-        jdbcTemplate.update(sqlQuery, transaction.getAmount(), transaction.getBetId(), transaction.getType(), transaction.getDate());
+        String sqlQuery = "INSERT INTO transactions (amount, bet_id, user_id, type, date) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sqlQuery, transaction.getAmount(), transaction.getBetId(), transaction.getUserId(), transaction.getType(), transaction.getDate());
         return Optional.of(transaction);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Transaction> findById(int id) {
-        String sqlQuery = "SELECT * FROM transactions WHERE id = ?;";
+    public Optional<Transaction> findById(UUID id) {
+        String sqlQuery = "SELECT * FROM transactions WHERE id = ?";
         return Optional.ofNullable(jdbcTemplate.queryForObject(sqlQuery, new TransactionRowMapper(), id));
 
     }
@@ -35,7 +36,7 @@ public class TransactionSQLAdapter implements TransactionPort {
     @Override
     @Transactional(readOnly = true)
     public Optional<List<Transaction>> findAll() {
-        String sqlQuery = "SELECT * FROM transactions;";
+        String sqlQuery = "SELECT * FROM transactions";
         return Optional.of(jdbcTemplate.query(sqlQuery, new TransactionRowMapper()));
     }
 }

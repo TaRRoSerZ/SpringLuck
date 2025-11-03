@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/transactions")
@@ -29,7 +30,7 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Transaction> getTransactionById(@PathVariable int id){
+    public ResponseEntity<Transaction> getTransactionById(@PathVariable UUID id){
         Optional<Transaction> transaction = transactionService.getTransactionById(id);
         return transaction.isPresent() ? ResponseEntity.ok(transaction.get()) : ResponseEntity.notFound().build();
     }

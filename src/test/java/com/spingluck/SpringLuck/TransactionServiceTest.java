@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -22,11 +23,9 @@ public class TransactionServiceTest {
 
     @Test
     void getAllTransactions() {
-        Bet bet1 = new Bet(1, 100.0, new Date(), false);
-        Bet bet2 = new Bet(2, 700.0, new Date(), true);
 
-        Transaction t1 = new Transaction(1, 500.0, 1, TransactionType.DEPOSIT, new Date());
-        Transaction t2 = new Transaction(2, 200.0, 2, TransactionType.WITHDRAWAL, new Date());
+        Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 500.0, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"), UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
+        Transaction t2 = new Transaction(UUID.fromString("170e8400-e29b-41d4-a716-446655440000"), 200.0, UUID.fromString("270e8400-e29b-41d4-a716-446655440000"), UUID.fromString("370e8400-e29b-41d4-a716-446655440000"), TransactionType.WITHDRAWAL, new Date());
 
         Optional<List<Transaction>> transactionsBd = Optional.of(List.of(t1, t2));
 
@@ -44,13 +43,12 @@ public class TransactionServiceTest {
 
     @Test
     void getTransactionById() {
-        Bet bet1 = new Bet(1, 100.0, new Date(), false);
-        Transaction t1 = new Transaction(1, 500.0, 1, TransactionType.DEPOSIT, new Date());
+        Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 500.0, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"), UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
         TransactionPort transactionPortStub = mock(TransactionPort.class);
-        when(transactionPortStub.findById(1)).thenReturn(Optional.of(t1));
+        when(transactionPortStub.findById(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(t1));
 
         TransactionUseCase transactionService = new TransactionService(transactionPortStub);
-        Optional<Transaction> transaction = transactionService.getTransactionById(1);
+        Optional<Transaction> transaction = transactionService.getTransactionById(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"));
         if (transaction.isEmpty()) {
             return;
         }
@@ -61,8 +59,7 @@ public class TransactionServiceTest {
 
     @Test
     void createTransaction() {
-        Bet bet1 = new Bet(1, 100.0, new Date(), false);
-        Transaction t1 = new Transaction(1, 500.0, 1, TransactionType.DEPOSIT, new Date());
+        Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 500.0, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"),UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
         TransactionPort transactionPortStub = mock(TransactionPort.class);
 
         TransactionUseCase transactionService = new TransactionService(transactionPortStub);

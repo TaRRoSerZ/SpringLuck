@@ -68,15 +68,15 @@ public class BetSQLAdapterTest {
     @Sql({"/db/migrations/V1__createBetTable.sql", "/db/migrations/V2__insertBets.sql"})
     public void getBetById() {
         Optional<Bet> betId2;
-        betId2 = betSQLAdapter.findById(UUID.fromString("2"));
+        betId2 = betSQLAdapter.findById(UUID.fromString("250e8400-e29b-41d4-a716-446655440000"));
 
         if (betId2.isEmpty()) {
-            Assertions.fail("Bet with ID 2 should be present");
+            Assertions.fail("Bet with ID 250e8400-e29b-41d4-a716-446655440000 should be present");
         }
 
         Bet secondBet = betId2.get();
 
-        Assertions.assertEquals(2, secondBet.getId());
+        Assertions.assertEquals(UUID.fromString("250e8400-e29b-41d4-a716-446655440000"), secondBet.getId());
         Assertions.assertEquals(50.00, secondBet.getAmount());
         Assertions.assertFalse(secondBet.getIsWinningBet());
     }
@@ -84,10 +84,10 @@ public class BetSQLAdapterTest {
     @Test
     @Sql({"/db/migrations/V1__createBetTable.sql", "/db/migrations/V2__insertBets.sql"})
     public void placeBet() {
-        Bet newBet = new Bet(3, 75.00, new java.util.Date(), true);
+        Bet newBet = new Bet(UUID.fromString("650e8400-e29b-41d4-a716-446655440000"),UUID.fromString("750e8400-e29b-41d4-a716-446655440000"), 75.00, new java.util.Date(), true);
         betSQLAdapter.save(newBet);
 
-        Optional<Bet> retrievedBet = betSQLAdapter.findById(3);
+        Optional<Bet> retrievedBet = betSQLAdapter.findById(UUID.fromString("650e8400-e29b-41d4-a716-446655440000"));
 
         if (retrievedBet.isEmpty()) {
             Assertions.fail("Newly placed bet should be present");
@@ -95,7 +95,7 @@ public class BetSQLAdapterTest {
 
         Bet placedBet = retrievedBet.get();
 
-        Assertions.assertEquals(3, placedBet.getId());
+        Assertions.assertEquals(UUID.fromString("650e8400-e29b-41d4-a716-446655440000"), placedBet.getId());
         Assertions.assertEquals(75.00, placedBet.getAmount());
         Assertions.assertTrue(placedBet.getIsWinningBet());
     }

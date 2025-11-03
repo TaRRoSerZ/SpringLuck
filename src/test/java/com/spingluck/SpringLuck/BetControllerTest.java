@@ -36,8 +36,12 @@ public class BetControllerTest {
     @DisplayName("GET /bets")
     @Test
     public void Get_all_bets() throws Exception {
-        Bet bet1 = new Bet(UUID.fromString("1"), UUID.fromString("2"), 100.0, new Date(), false);
-        Bet bet2 = new Bet(UUID.fromString("3"), UUID.fromString("4"), 300.0, new Date(), true);
+        UUID betId1 = UUID.fromString("150e8400-e29b-41d4-a716-446655440000");
+        UUID userId1 = UUID.fromString("250e8400-e29b-41d4-a716-446655440000");
+        UUID betId2 = UUID.fromString("350e8400-e29b-41d4-a716-446655440000");
+        UUID userId2 = UUID.fromString("450e8400-e29b-41d4-a716-446655440000");
+        Bet bet1 = new Bet(betId1, userId1, 100.0, new Date(), false);
+        Bet bet2 = new Bet(betId2, userId2, 300.0, new Date(), true);
 
         Optional<List<Bet>> betsBd = Optional.of(List.of(bet1, bet2));
 
@@ -48,10 +52,10 @@ public class BetControllerTest {
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(UUID.fromString("1")))
+                .andExpect(jsonPath("$[0].id").value(betId1.toString()))
                 .andExpect(jsonPath("$[0].amount").value(100.0))
                 .andExpect(jsonPath("$[0].isWinningBet").value(false))
-                .andExpect(jsonPath("$[1].id").value(UUID.fromString("3")))
+                .andExpect(jsonPath("$[1].id").value(betId2.toString()))
                 .andExpect(jsonPath("$[1].amount").value(300.0));
 
     }
@@ -59,14 +63,14 @@ public class BetControllerTest {
     @DisplayName("GET /bets/{id}")
     @Test
     public void Get_bet_by_id() throws Exception {
-        Bet bet1 = new Bet(UUID.fromString("1"), UUID.fromString("2"), 100.0, new Date(), false);
-        when(betServiceStub.getBetById(UUID.fromString("1"))).thenReturn(Optional.of(bet1));
+        Bet bet1 = new Bet(UUID.fromString("150e8400-e29b-41d4-a716-446655440000"), UUID.fromString("250e8400-e29b-41d4-a716-446655440000"), 100.0, new Date(), false);
+        when(betServiceStub.getBetById(UUID.fromString("150e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(bet1));
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/bets/1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/bets/150e8400-e29b-41d4-a716-446655440000");
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(UUID.fromString("1")))
+                .andExpect(jsonPath("$.id").value(UUID.fromString("150e8400-e29b-41d4-a716-446655440000").toString()))
                 .andExpect(jsonPath("$.amount").value(100.0))
                 .andExpect(jsonPath("$.isWinningBet").value(false));
 
@@ -77,8 +81,8 @@ public class BetControllerTest {
     public void Save_bet() throws Exception {
         String betJson = """
                 {
-                    "id": "1",
-                    "userId" : "2",
+                    "id": "150e8400-e29b-41d4-a716-446655440000",
+                    "userId" : "250e8400-e29b-41d4-a716-446655440000",
                     "amount": 100.0,
                     "date": "2022-02-02",
                     "isWinningBet": false

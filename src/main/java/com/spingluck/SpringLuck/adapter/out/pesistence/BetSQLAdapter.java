@@ -18,8 +18,8 @@ public class BetSQLAdapter implements BetPort {
 
     @Override
     public void save(Bet bet) {
-        String sqlQuery = "INSERT INTO bets (amount, date, isWinningBet) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sqlQuery, bet.getAmount(), bet.getDate(), bet.getIsWinningBet());
+        String sqlQuery = "INSERT INTO bets (id, user_id, amount, date, isWinningBet) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sqlQuery, bet.getId(), bet.getUserId(), bet.getAmount(), bet.getDate(), bet.getIsWinningBet());
     }
 
     @Override

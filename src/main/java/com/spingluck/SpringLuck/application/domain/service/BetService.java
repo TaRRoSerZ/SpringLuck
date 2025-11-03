@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -26,7 +27,7 @@ public class BetService implements BetUseCase {
     }
 
     @Override
-    public Optional<Bet> getBetById(int id) {
+    public Optional<Bet> getBetById(UUID id) {
         return betPort.findById(id);
     }
 }
