@@ -74,6 +74,29 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$.type").value(TransactionType.BET_WIN.name()));
     }
 
+    @DisplayName("GET /transactions/user/{userId}")
+    @Test
+    void Get_transaction_by_user_id() throws Exception {
+        Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 300.00, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"),UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.BET_WIN, new Date());
+        Transaction t2 = new Transaction(UUID.fromString("280e8400-e29b-41d4-a716-446655440000"), 300.00, UUID.fromString("270e8400-e29b-41d4-a716-446655440000"),UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.BET_LOSS, new Date());
+
+        Optional<List<Transaction>> transactionsBd = Optional.of(List.of(t1, t2));
+
+        when(transactionServiceStub.getAllUserTransaction(UUID.fromString("360e8400-e29b-41d4-a716-446655440000"))).thenReturn(transactionsBd);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/transactions/user/360e8400-e29b-41d4-a716-446655440000");
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].amount").value(300.00))
+                .andExpect(jsonPath("$[1].amount").value(300.00))
+                .andExpect(jsonPath("$[0].betId").value(UUID.fromString("260e8400-e29b-41d4-a716-446655440000").toString()))
+                .andExpect(jsonPath("$[1].betId").value(UUID.fromString("270e8400-e29b-41d4-a716-446655440000").toString()))
+                .andExpect(jsonPath("$[0].type").value(TransactionType.BET_WIN.name()))
+                .andExpect(jsonPath("$[1].type").value(TransactionType.BET_LOSS.name()));
+
+    }
+
     @DisplayName("POST /transactions/create")
     @Test
     void Create_transaction_with_bet() throws Exception {

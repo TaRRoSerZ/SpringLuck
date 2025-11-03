@@ -65,6 +65,21 @@ public class TransactionServiceTest {
         TransactionUseCase transactionService = new TransactionService(transactionPortStub);
         transactionService.createTransaction(t1);
         verify(transactionPortStub).save(t1);
+    }
 
+    @Test
+    void getTransactionByUserId() {
+        Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 500.0, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"), UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
+        Transaction t2 = new Transaction(UUID.fromString("170e8400-e29b-41d4-a716-446655440000"), 500.0, UUID.fromString("270e8400-e29b-41d4-a716-446655440000"), UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
+        Optional<List<Transaction>> transactionsBd = Optional.of(List.of(t1, t2));
+        TransactionPort transactionPortStub = mock(TransactionPort.class);
+        when(transactionPortStub.findTransactionsByUserId(UUID.fromString("360e8400-e29b-41d4-a716-446655440000"))).thenReturn(transactionsBd);
+
+        TransactionUseCase transactionService = new TransactionService(transactionPortStub);
+        Optional<List<Transaction>> transactions = transactionService.getAllUserTransaction(UUID.fromString("360e8400-e29b-41d4-a716-446655440000"));
+        if (transactions.isEmpty()) {
+            return;
+        }
+        Assertions.assertArrayEquals(transactions.get().toArray(), transactionsBd.get().toArray());
     }
 }

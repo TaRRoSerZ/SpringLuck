@@ -35,6 +35,12 @@ public class TransactionController {
         return transaction.isPresent() ? ResponseEntity.ok(transaction.get()) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Transaction>> getTransactionsByUserId(@PathVariable UUID userId){
+        Optional<List<Transaction>> transactionsForUser = transactionService.getAllUserTransaction(userId);
+        return transactionsForUser.isPresent() ? ResponseEntity.ok(transactionsForUser.get()) : ResponseEntity.notFound().build();
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction){
         try {
