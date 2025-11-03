@@ -1,2 +1,2 @@
-INSERT INTO public.bets (amount, date, isWinningBet) VALUES (100.00, '2024-06-01 10:00:00', true);
-INSERT INTO public.bets (amount, date, isWinningBet) VALUES (50.00, '2024-06-02 11:30:00', false);
+INSERT INTO public.bets (id, user_id, amount, date, isWinningBet) VALUES ('150e8400-e29b-41d4-a716-446655440000', '350e8400-e29b-41d4-a716-446655440000', 100.00, '2024-06-01 10:00:00', true);
+INSERT INTO public.bets (id, user_id, amount, date, isWinningBet) VALUES ('250e8400-e29b-41d4-a716-446655440000','450e8400-e29b-41d4-a716-446655440000', 50.00, '2024-06-02 11:30:00', false);

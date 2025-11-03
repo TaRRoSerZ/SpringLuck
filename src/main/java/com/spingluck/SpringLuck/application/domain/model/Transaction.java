@@ -13,6 +13,7 @@ public class Transaction {
     private UUID id;
     private Double amount;
     private UUID betId;
+    private UUID userId;
     private TransactionType type;
     private Date date;
 }

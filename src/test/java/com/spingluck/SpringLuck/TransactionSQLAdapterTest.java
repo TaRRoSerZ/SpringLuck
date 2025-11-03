@@ -20,6 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -58,7 +59,7 @@ public class TransactionSQLAdapterTest {
         Assertions.assertEquals(5, transactions.get().size());
 
         Transaction firstTransaction = transactions.get().getFirst();
-        Assertions.assertEquals(1, firstTransaction.getId());
+        Assertions.assertEquals(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), firstTransaction.getId());
         Assertions.assertEquals(100.0, firstTransaction.getAmount());
         Assertions.assertNull(firstTransaction.getBetId());
         Assertions.assertEquals("DEPOSIT", firstTransaction.getType().name());

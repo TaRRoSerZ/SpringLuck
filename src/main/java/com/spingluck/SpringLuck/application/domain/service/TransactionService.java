@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class TransactionService implements TransactionUseCase {
     }
 
     @Override
-    public Optional<Transaction> getTransactionById(int id) {
+    public Optional<Transaction> getTransactionById(UUID id) {
         return transactionPort.findById(id);
     }
 }

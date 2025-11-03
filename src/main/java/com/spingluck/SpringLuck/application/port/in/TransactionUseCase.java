@@ -6,10 +6,11 @@ import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface TransactionUseCase {
 
     Optional<Transaction> createTransaction(Transaction transaction);
     Optional<List<Transaction>> getAllTransactions();
-    Optional<Transaction> getTransactionById(int id);
+    Optional<Transaction> getTransactionById(UUID id);
 }

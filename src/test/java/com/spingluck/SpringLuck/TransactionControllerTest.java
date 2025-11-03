@@ -20,6 +20,7 @@ import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,10 +39,8 @@ public class TransactionControllerTest {
     @DisplayName("GET /transactions")
     @Test
     void Get_all_transactions() throws Exception {
-        Bet bet1 = new Bet(1, 100.00, new Date(), true);
-        Bet bet2 = new Bet(2, 200.00, new Date(), false);
-        Transaction t1 = new Transaction(1, 300.00, 1, TransactionType.BET_WIN, new Date());
-        Transaction t2 = new Transaction(2, 50.00, 2, TransactionType.BET_LOSS, new Date());
+        Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 300.00, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"),UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.BET_WIN, new Date());
+        Transaction t2 = new Transaction(UUID.fromString("170e8400-e29b-41d4-a716-446655440000"), 50.00, UUID.fromString("270e8400-e29b-41d4-a716-446655440000"),UUID.fromString("370e8400-e29b-41d4-a716-446655440000"), TransactionType.BET_LOSS, new Date());
 
         Optional<List<Transaction>> transactionsBd = Optional.of(List.of(t1, t2));
 
@@ -53,8 +52,8 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].amount").value(300.00))
                 .andExpect(jsonPath("$[1].amount").value(50.00))
-                .andExpect(jsonPath("$[0].betId").value(1))
-                .andExpect(jsonPath("$[1].betId").value(2))
+                .andExpect(jsonPath("$[0].betId").value(UUID.fromString("260e8400-e29b-41d4-a716-446655440000").toString()))
+                .andExpect(jsonPath("$[1].betId").value(UUID.fromString("270e8400-e29b-41d4-a716-446655440000").toString()))
                 .andExpect(jsonPath("$[0].type").value(TransactionType.BET_WIN.name()))
                 .andExpect(jsonPath("$[1].type").value(TransactionType.BET_LOSS.name()));
     }
@@ -62,17 +61,16 @@ public class TransactionControllerTest {
     @DisplayName("GET /transactions/{id}")
     @Test
     void Get_transaction_by_id() throws Exception {
-        Bet bet1 = new Bet(1, 100.00, new Date(), true);
-        Transaction t1 = new Transaction(1, 300.00, 1, TransactionType.BET_WIN, new Date());
+        Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 300.00, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"),UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.BET_WIN, new Date());
 
-        when(transactionServiceStub.getTransactionById(1)).thenReturn(Optional.of(t1));
+        when(transactionServiceStub.getTransactionById(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"))).thenReturn(Optional.of(t1));
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/transactions/1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/transactions/160e8400-e29b-41d4-a716-446655440000");
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").value(UUID.fromString("160e8400-e29b-41d4-a716-446655440000").toString()))
                 .andExpect(jsonPath("$.amount").value(300.00))
-                .andExpect(jsonPath("$.betId").value(1))
+                .andExpect(jsonPath("$.betId").value(UUID.fromString("260e8400-e29b-41d4-a716-446655440000").toString()))
                 .andExpect(jsonPath("$.type").value(TransactionType.BET_WIN.name()));
     }
 
@@ -81,9 +79,10 @@ public class TransactionControllerTest {
     void Create_transaction_with_bet() throws Exception {
         String transactionJson = """
                 {
-                    "id": 1,
+                    "id": "170e8400-e29b-41d4-a716-446655440000",
                     "amount": 100.0,
-                    "betId" : 1,
+                    "betId" : "270e8400-e29b-41d4-a716-446655440000",
+                    "userId" : "370e8400-e29b-41d4-a716-446655440000",
                     "type": "BET_WIN",
                     "date": "2022-02-02"
                 }
@@ -104,8 +103,9 @@ public class TransactionControllerTest {
     void Create_transaction_without_bet() throws Exception {
         String transactionJson = """
                 {
-                    "id": 1,
+                    "id": "180e8400-e29b-41d4-a716-446655440000",
                     "amount": 100.0,
+                    "userId" : "380e8400-e29b-41d4-a716-446655440000",
                     "type": "BET_WIN",
                     "date": "2022-02-02"
                 }
