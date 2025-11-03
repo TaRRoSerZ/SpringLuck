@@ -3,6 +3,7 @@ package com.spingluck.SpringLuck;
 import com.spingluck.SpringLuck.adapter.out.pesistence.TransactionRowMapper;
 import com.spingluck.SpringLuck.adapter.out.pesistence.TransactionSQLAdapter;
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
+import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,13 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.jta.JtaTransactionManager;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -64,4 +64,45 @@ public class TransactionSQLAdapterTest {
         Assertions.assertNull(firstTransaction.getBetId());
         Assertions.assertEquals("DEPOSIT", firstTransaction.getType().name());
     }
+
+    @Test
+    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
+    public void getTransactionById() {
+        Optional<Transaction> transactionId2;
+        transactionId2 = transactionSQLAdapter.findById(UUID.fromString("260e8400-e29b-41d4-a716-446655440000"));
+
+        if (transactionId2.isEmpty()) {
+            Assertions.fail("No transaction found");
+        }
+
+        Transaction transaction2 = transactionId2.get();
+
+        Assertions.assertEquals(UUID.fromString("260e8400-e29b-41d4-a716-446655440000"), transaction2.getId());
+        Assertions.assertEquals(50.0, transaction2.getAmount());
+        Assertions.assertNull(transaction2.getBetId());
+        Assertions.assertEquals("WITHDRAWAL", transaction2.getType().name());
+    }
+
+    @Test
+    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
+    public void placeTransaction() {
+        Transaction newTransaction = new Transaction(UUID.fromString("900e8400-e29b-41d4-a716-446655440000"), 500.0, null, UUID.fromString("920e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
+        transactionSQLAdapter.save(newTransaction);
+
+        Optional<Transaction> retrievedTransaction = transactionSQLAdapter.findById(UUID.fromString("900e8400-e29b-41d4-a716-446655440000"));
+
+        if (retrievedTransaction.isEmpty()) {
+            Assertions.fail("Newly placed transaction should be present");
+        }
+
+        Transaction madeTransaction = retrievedTransaction.get();
+
+        Assertions.assertEquals(UUID.fromString("900e8400-e29b-41d4-a716-446655440000"), madeTransaction.getId());
+        Assertions.assertEquals(500.0, madeTransaction.getAmount());
+        Assertions.assertNull(madeTransaction.getBetId());
+
+
+
+    }
+
 }

@@ -19,10 +19,23 @@ public class TransactionSQLAdapter implements TransactionPort {
 
     @Override
     @Transactional
-    public Optional<Transaction> save(Transaction transaction) {
-        String sqlQuery = "INSERT INTO transactions (amount, bet_id, user_id, type, date) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sqlQuery, transaction.getAmount(), transaction.getBetId(), transaction.getUserId(), transaction.getType(), transaction.getDate());
-        return Optional.of(transaction);
+    public Optional<Transaction> save(Transaction t) {
+        String sql = """
+        
+                INSERT INTO transactions (id, amount, bet_id, user_id, type, date)
+        VALUES (?, ?, ?, ?, ?::transaction_type, ?)
+        """;
+
+        jdbcTemplate.update(
+                sql,
+                t.getId(),
+                t.getAmount(),
+                t.getBetId(),
+                t.getUserId(),
+                t.getType().name(),
+                new java.sql.Timestamp(t.getDate().getTime())
+        );
+        return Optional.of(t);
     }
 
     @Override
