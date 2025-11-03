@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter @Setter
 @AllArgsConstructor
 public class Transaction {
-    private int id;
+    private UUID id;
     private Double amount;
-    private Bet bet = null;
+    private UUID betId;
     private TransactionType type;
     private Date date;
 }

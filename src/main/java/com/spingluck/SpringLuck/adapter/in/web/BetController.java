@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/bets")
@@ -27,7 +28,7 @@ public class BetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Bet> getBetById(@PathVariable int id){
+    public ResponseEntity<Bet> getBetById(@PathVariable UUID id){
         Optional<Bet> bet = betService.getBetById(id);
         return bet.isPresent() ? ResponseEntity.ok(bet.get()) : ResponseEntity.notFound().build();
     }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @AllArgsConstructor
@@ -22,7 +23,7 @@ public class BetSQLAdapter implements BetPort {
     }
 
     @Override
-    public Optional<Bet> findById(int id) {
+    public Optional<Bet> findById(UUID id) {
         String sqlQuery = "SELECT * FROM bets WHERE id = ?";
         return Optional.ofNullable(jdbcTemplate.queryForObject(sqlQuery, new BetRowMapper(), id));
     }

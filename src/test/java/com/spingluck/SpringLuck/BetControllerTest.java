@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,8 +36,8 @@ public class BetControllerTest {
     @DisplayName("GET /bets")
     @Test
     public void Get_all_bets() throws Exception {
-        Bet bet1 = new Bet(1, 100.0, new Date(), false);
-        Bet bet2 = new Bet(3, 300.0, new Date(), true);
+        Bet bet1 = new Bet(UUID.fromString("1"), UUID.fromString("2"), 100.0, new Date(), false);
+        Bet bet2 = new Bet(UUID.fromString("3"), UUID.fromString("4"), 300.0, new Date(), true);
 
         Optional<List<Bet>> betsBd = Optional.of(List.of(bet1, bet2));
 
@@ -47,10 +48,10 @@ public class BetControllerTest {
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].id").value(UUID.fromString("1")))
                 .andExpect(jsonPath("$[0].amount").value(100.0))
                 .andExpect(jsonPath("$[0].isWinningBet").value(false))
-                .andExpect(jsonPath("$[1].id").value(3))
+                .andExpect(jsonPath("$[1].id").value(UUID.fromString("3")))
                 .andExpect(jsonPath("$[1].amount").value(300.0));
 
     }
@@ -58,14 +59,14 @@ public class BetControllerTest {
     @DisplayName("GET /bets/{id}")
     @Test
     public void Get_bet_by_id() throws Exception {
-        Bet bet1 = new Bet(1, 100.0, new Date(), false);
-        when(betServiceStub.getBetById(1)).thenReturn(Optional.of(bet1));
+        Bet bet1 = new Bet(UUID.fromString("1"), UUID.fromString("2"), 100.0, new Date(), false);
+        when(betServiceStub.getBetById(UUID.fromString("1"))).thenReturn(Optional.of(bet1));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/bets/1");
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").value(UUID.fromString("1")))
                 .andExpect(jsonPath("$.amount").value(100.0))
                 .andExpect(jsonPath("$.isWinningBet").value(false));
 
@@ -76,7 +77,8 @@ public class BetControllerTest {
     public void Save_bet() throws Exception {
         String betJson = """
                 {
-                    "id": 1,
+                    "id": "1",
+                    "userId" : "2",
                     "amount": 100.0,
                     "date": "2022-02-02",
                     "isWinningBet": false

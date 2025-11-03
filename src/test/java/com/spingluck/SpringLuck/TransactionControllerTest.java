@@ -40,8 +40,8 @@ public class TransactionControllerTest {
     void Get_all_transactions() throws Exception {
         Bet bet1 = new Bet(1, 100.00, new Date(), true);
         Bet bet2 = new Bet(2, 200.00, new Date(), false);
-        Transaction t1 = new Transaction(1, 300.00, bet1, TransactionType.BET_WIN, new Date());
-        Transaction t2 = new Transaction(2, 50.00, bet2, TransactionType.BET_LOSS, new Date());
+        Transaction t1 = new Transaction(1, 300.00, 1, TransactionType.BET_WIN, new Date());
+        Transaction t2 = new Transaction(2, 50.00, 2, TransactionType.BET_LOSS, new Date());
 
         Optional<List<Transaction>> transactionsBd = Optional.of(List.of(t1, t2));
 
@@ -53,8 +53,8 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].amount").value(300.00))
                 .andExpect(jsonPath("$[1].amount").value(50.00))
-                .andExpect(jsonPath("$[0].bet.amount").value(100.00))
-                .andExpect(jsonPath("$[1].bet.amount").value(200.00))
+                .andExpect(jsonPath("$[0].betId").value(1))
+                .andExpect(jsonPath("$[1].betId").value(2))
                 .andExpect(jsonPath("$[0].type").value(TransactionType.BET_WIN.name()))
                 .andExpect(jsonPath("$[1].type").value(TransactionType.BET_LOSS.name()));
     }
@@ -63,7 +63,7 @@ public class TransactionControllerTest {
     @Test
     void Get_transaction_by_id() throws Exception {
         Bet bet1 = new Bet(1, 100.00, new Date(), true);
-        Transaction t1 = new Transaction(1, 300.00, bet1, TransactionType.BET_WIN, new Date());
+        Transaction t1 = new Transaction(1, 300.00, 1, TransactionType.BET_WIN, new Date());
 
         when(transactionServiceStub.getTransactionById(1)).thenReturn(Optional.of(t1));
 
@@ -72,7 +72,7 @@ public class TransactionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.amount").value(300.00))
-                .andExpect(jsonPath("$.bet.amount").value(100.00))
+                .andExpect(jsonPath("$.betId").value(1))
                 .andExpect(jsonPath("$.type").value(TransactionType.BET_WIN.name()));
     }
 
@@ -83,12 +83,7 @@ public class TransactionControllerTest {
                 {
                     "id": 1,
                     "amount": 100.0,
-                    "bet": {
-                                "id": 1,
-                                "amount": 50.0,
-                                "date": "2022-02-02",
-                                "isWinningBet": true
-                            },
+                    "betId" : 1,
                     "type": "BET_WIN",
                     "date": "2022-02-02"
                 }
