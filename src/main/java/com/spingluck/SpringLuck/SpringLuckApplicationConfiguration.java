@@ -1,8 +1,11 @@
 package com.spingluck.SpringLuck;
 
 import com.spingluck.SpringLuck.application.domain.service.BetService;
+import com.spingluck.SpringLuck.application.domain.service.TransactionService;
 import com.spingluck.SpringLuck.application.port.in.BetUseCase;
+import com.spingluck.SpringLuck.application.port.in.TransactionUseCase;
 import com.spingluck.SpringLuck.application.port.out.BetPort;
+import com.spingluck.SpringLuck.application.port.out.TransactionPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +17,14 @@ public class SpringLuckApplicationConfiguration {
 
     @Autowired
     private BetPort betPort;
+
+    @Autowired
+    private TransactionPort transactionPort;
+
+    @Bean
+    TransactionUseCase transactionUseCase() {
+        return new TransactionService(transactionPort);
+    }
 
     @Bean
     BetUseCase betUseCase() {

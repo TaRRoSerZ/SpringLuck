@@ -20,6 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -49,7 +50,7 @@ public class BetSQLAdapterTest {
     BetSQLAdapter betSQLAdapter;
 
     @Test
-    @Sql({"/db/createBetTable.sql", "/db/insertBets.sql"})
+    @Sql({"/db/migrations/V1__createBetTable.sql", "/db/migrations/V2__insertBets.sql"})
     public void getAllBets() {
         Optional<List<Bet>> bets;
         bets = betSQLAdapter.findAll();
@@ -64,10 +65,10 @@ public class BetSQLAdapterTest {
     }
 
     @Test
-    @Sql({"/db/createBetTable.sql", "/db/insertBets.sql"})
+    @Sql({"/db/migrations/V1__createBetTable.sql", "/db/migrations/V2__insertBets.sql"})
     public void getBetById() {
         Optional<Bet> betId2;
-        betId2 = betSQLAdapter.findById(2);
+        betId2 = betSQLAdapter.findById(UUID.fromString("2"));
 
         if (betId2.isEmpty()) {
             Assertions.fail("Bet with ID 2 should be present");
@@ -81,7 +82,7 @@ public class BetSQLAdapterTest {
     }
 
     @Test
-    @Sql({"/db/createBetTable.sql", "/db/insertBets.sql"})
+    @Sql({"/db/migrations/V1__createBetTable.sql", "/db/migrations/V2__insertBets.sql"})
     public void placeBet() {
         Bet newBet = new Bet(3, 75.00, new java.util.Date(), true);
         betSQLAdapter.save(newBet);
