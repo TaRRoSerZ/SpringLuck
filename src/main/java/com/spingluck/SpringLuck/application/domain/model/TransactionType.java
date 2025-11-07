@@ -5,5 +5,5 @@ public enum TransactionType {
     WITHDRAWAL,
     BET_PLACED,
     BET_WIN,
-    BET_LOSS
+    WITHDRAW, BET, BET_LOSS
 }
