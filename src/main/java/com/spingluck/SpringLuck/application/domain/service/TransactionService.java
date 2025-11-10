@@ -29,6 +29,11 @@ public class TransactionService implements TransactionUseCase {
     }
 
     @Override
+    public Optional<List<Transaction>> getAllUserTransaction(UUID userId) {
+        return transactionPort.findTransactionsByUserId(userId);
+    }
+
+    @Override
     public Optional<Transaction> getTransactionById(UUID id) {
         return transactionPort.findById(id);
     }

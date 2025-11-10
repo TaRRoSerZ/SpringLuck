@@ -67,6 +67,22 @@ public class TransactionSQLAdapterTest {
 
     @Test
     @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
+    public void getAllUserTransactions() {
+        Optional<List<Transaction>> transactions;
+        transactions = transactionSQLAdapter.findTransactionsByUserId(UUID.fromString("380e8400-e29b-41d4-a716-446655440000"));
+        Assertions.assertTrue(transactions.isPresent());
+        Assertions.assertFalse(transactions.get().isEmpty());
+        Assertions.assertEquals(1, transactions.get().size());
+
+        Transaction firstTransaction = transactions.get().getFirst();
+        Assertions.assertEquals(UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), firstTransaction.getId());
+        Assertions.assertEquals(20.0, firstTransaction.getAmount());
+        Assertions.assertEquals(firstTransaction.getBetId(), UUID.fromString("370e8400-e29b-41d4-a716-446655440000"));
+        Assertions.assertEquals("BET_PLACED", firstTransaction.getType().name());
+    }
+
+    @Test
+    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
     public void getTransactionById() {
         Optional<Transaction> transactionId2;
         transactionId2 = transactionSQLAdapter.findById(UUID.fromString("260e8400-e29b-41d4-a716-446655440000"));

@@ -12,5 +12,6 @@ public interface TransactionUseCase {
 
     Optional<Transaction> createTransaction(Transaction transaction);
     Optional<List<Transaction>> getAllTransactions();
+    Optional<List<Transaction>> getAllUserTransaction(UUID id);
     Optional<Transaction> getTransactionById(UUID id);
 }
