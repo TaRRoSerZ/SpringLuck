@@ -116,7 +116,6 @@ public class TransactionSQLAdapterTest {
         Assertions.assertEquals(UUID.fromString("900e8400-e29b-41d4-a716-446655440000"), madeTransaction.getId());
         Assertions.assertEquals(500.0, madeTransaction.getAmount());
         Assertions.assertNull(madeTransaction.getBetId());
-
     }
 
 }
