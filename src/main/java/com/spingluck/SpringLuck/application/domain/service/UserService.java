@@ -3,6 +3,7 @@ package com.spingluck.SpringLuck.application.domain.service;
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
 import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 import com.spingluck.SpringLuck.application.domain.model.User;
+import com.spingluck.SpringLuck.application.port.in.TransactionUseCase;
 import com.spingluck.SpringLuck.application.port.in.UserUseCase;
 import com.spingluck.SpringLuck.application.port.out.UserPort;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import static org.yaml.snakeyaml.DumperOptions.LineBreak.WIN;
 public class UserService implements UserUseCase {
 
     private final UserPort userPort;
+    private final TransactionUseCase transactionService;
 
     @Override
     public Optional<User> syncUser(User user) {
@@ -42,12 +44,14 @@ public class UserService implements UserUseCase {
     @Override
     public void applyTransaction(User user, TransactionType type, Double amount) {
         Transaction transaction = new Transaction(UUID.randomUUID(), amount, null, user.getId(), type, new Date());
-        switch (type) {
-            case DEPOSIT, BET_WIN -> user.setBalance(user.getBalance() + amount);
-            case WITHDRAW, BET_LOSS, BET_PLACED -> user.setBalance(user.getBalance() - amount);
-        }
+        double delta = switch (type) {
+            case DEPOSIT, BET_WIN -> amount;
+            case WITHDRAW, BET_LOSS, BET_PLACED -> -amount;
+        };
+
+        user.setBalance(user.getBalance() + delta);
         user.setUpdatedAt(Instant.now());
-        userPort.saveUser(user);
-        userPort.makeTransaction(transaction, user);
+        userPort.updateBalance(user.getEmail(), delta);
+        transactionService.createTransaction(transaction);
     }
 }

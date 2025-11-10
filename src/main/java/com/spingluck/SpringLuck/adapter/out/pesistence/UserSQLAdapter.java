@@ -2,14 +2,15 @@ package com.spingluck.SpringLuck.adapter.out.pesistence;
 
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
 import com.spingluck.SpringLuck.application.domain.model.User;
+import com.spingluck.SpringLuck.application.port.in.TransactionUseCase;
 import com.spingluck.SpringLuck.application.port.out.UserPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
-import java.security.Timestamp;
-import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,8 @@ public class UserSQLAdapter implements UserPort {
                 user.getEmail(),
                 user.getBalance(),
                 user.isActive(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
+                Timestamp.from(user.getCreatedAt()),
+                Timestamp.from(user.getUpdatedAt())
         );
         return rows > 0 ? Optional.of(user) : Optional.empty();
     }
@@ -42,22 +43,17 @@ public class UserSQLAdapter implements UserPort {
     @Override
     public Optional<User> findUserByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new UserRowMapper(), email));
+        try {
+            User user = jdbcTemplate.queryForObject(sql, new UserRowMapper(), email);
+            return Optional.ofNullable(user);
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public void makeTransaction(Transaction transaction, User user) {
-        String insertSql  = "INSERT INTO transactions (id, amount, bet_id, user_id, type, date) VALUES (?, ?, ?, ?, ?::transaction_type, ?)";
-        jdbcTemplate.update(insertSql ,
-                transaction.getId(),
-                transaction.getAmount(),
-                transaction.getBetId(),
-                transaction.getUserId(),
-                transaction.getType().name(),
-                transaction.getDate()
-        );
-
-        String updateSql = "UPDATE users SET balance = balance + ? WHERE id = ?";
-        jdbcTemplate.update(updateSql, transaction.getAmount(), user.getId());
+    public void updateBalance(String email, Double amount) {
+        String updateSql = "UPDATE users SET balance = balance + ?, updated_at = ? WHERE email = ?";
+        jdbcTemplate.update(updateSql, amount, Timestamp.from(Instant.now()), email);
     }
 }

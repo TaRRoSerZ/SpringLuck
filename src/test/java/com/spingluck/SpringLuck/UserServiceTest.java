@@ -4,6 +4,7 @@ import com.spingluck.SpringLuck.application.domain.model.Transaction;
 import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 import com.spingluck.SpringLuck.application.domain.model.User;
 import com.spingluck.SpringLuck.application.domain.service.UserService;
+import com.spingluck.SpringLuck.application.port.in.TransactionUseCase;
 import com.spingluck.SpringLuck.application.port.in.UserUseCase;
 import com.spingluck.SpringLuck.application.port.out.UserPort;
 import org.junit.jupiter.api.Assertions;
@@ -27,9 +28,10 @@ public class UserServiceTest {
         Optional<List<User>> userBd = Optional.of(List.of(user1, user2));
 
         UserPort userPort = mock(UserPort.class);
+        TransactionUseCase transactionService = mock(TransactionUseCase.class);
         when(userPort.findAllUsers()).thenReturn(userBd);
 
-        UserUseCase userService = new UserService(userPort);
+        UserUseCase userService = new UserService(userPort, transactionService);
 
         Optional<List<User>> users = userService.getAllUsers();
         if (users.isEmpty()) {
@@ -45,7 +47,8 @@ public class UserServiceTest {
         UserPort userPort = mock(UserPort.class);
         when(userPort.findUserByEmail("gege@gmail.com")).thenReturn(Optional.of(user));
 
-        UserUseCase userService = new UserService(userPort);
+        TransactionUseCase transactionService = mock(TransactionUseCase.class);
+        UserUseCase userService = new UserService(userPort, transactionService);
 
         Optional<User> userFound = userService.getUserByEmail("gege@gmail.com");
         if (userFound.isEmpty()) {
@@ -63,8 +66,8 @@ public class UserServiceTest {
         User user = new User(UUID.randomUUID(), userEmail, 100.00, true, Instant.now(), Instant.now());
         UserPort userPort = mock(UserPort.class);
         when(userPort.findUserByEmail(userEmail)).thenReturn(Optional.of(user));
-
-        UserUseCase userService = new UserService(userPort);
+        TransactionUseCase transactionService = mock(TransactionUseCase.class);
+        UserUseCase userService = new UserService(userPort, transactionService);
 
         Optional<User> existingUser = userService.syncUser(user);
         Assertions.assertTrue(existingUser.isPresent());
@@ -83,8 +86,8 @@ public class UserServiceTest {
         UserPort userPort = mock(UserPort.class);
         when(userPort.findUserByEmail(userEmail)).thenReturn(Optional.empty());
         when(userPort.saveUser(user)).thenReturn(Optional.of(user));
-
-        UserUseCase userService = new UserService(userPort);
+        TransactionUseCase transactionService = mock(TransactionUseCase.class);
+        UserUseCase userService = new UserService(userPort, transactionService);
 
         Optional<User> existingUser = userService.syncUser(user);
 
@@ -110,13 +113,13 @@ public class UserServiceTest {
         User user = new User(UUID.randomUUID(), "test@gmail.com", initial, true, Instant.now(), Instant.now());
         double amount = 50.0;
 
+        TransactionUseCase transactionService = mock(TransactionUseCase.class);
         UserPort userPort = mock(UserPort.class);
-        UserService userService = new UserService(userPort);
+        UserService userService = new UserService(userPort, transactionService);
 
         userService.applyTransaction(user, type, amount);
 
         Assertions.assertEquals(expected, user.getBalance());
-        verify(userPort).saveUser(user);
-        verify(userPort).makeTransaction(any(Transaction.class), eq(user));
+        verify(transactionService, times(1)).createTransaction(any(Transaction.class));
     }
 }

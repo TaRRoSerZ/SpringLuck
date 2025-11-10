@@ -25,7 +25,7 @@ public class TransactionServiceTest {
     void getAllTransactions() {
 
         Transaction t1 = new Transaction(UUID.fromString("160e8400-e29b-41d4-a716-446655440000"), 500.0, UUID.fromString("260e8400-e29b-41d4-a716-446655440000"), UUID.fromString("360e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
-        Transaction t2 = new Transaction(UUID.fromString("170e8400-e29b-41d4-a716-446655440000"), 200.0, UUID.fromString("270e8400-e29b-41d4-a716-446655440000"), UUID.fromString("370e8400-e29b-41d4-a716-446655440000"), TransactionType.WITHDRAWAL, new Date());
+        Transaction t2 = new Transaction(UUID.fromString("170e8400-e29b-41d4-a716-446655440000"), 200.0, UUID.fromString("270e8400-e29b-41d4-a716-446655440000"), UUID.fromString("370e8400-e29b-41d4-a716-446655440000"), TransactionType.WITHDRAW, new Date());
 
         Optional<List<Transaction>> transactionsBd = Optional.of(List.of(t1, t2));
 

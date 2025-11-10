@@ -11,5 +11,5 @@ public interface UserPort {
     Optional<User> saveUser(User user);
     Optional<List<User>> findAllUsers();
     Optional<User> findUserByEmail(String email);
-    void makeTransaction(Transaction transaction, User user);
+    void updateBalance(String email, Double amount);
 }
