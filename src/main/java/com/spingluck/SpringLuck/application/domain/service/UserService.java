@@ -28,6 +28,11 @@ public class UserService implements UserUseCase {
         if (existing.isPresent()) {
             return existing;
         }
+        user.setId(UUID.randomUUID());
+        user.setBalance(0.0);
+        user.setActive(true);
+        user.setCreatedAt(Instant.now());
+        user.setUpdatedAt(Instant.now());
         return userPort.saveUser(user);
     }
 
