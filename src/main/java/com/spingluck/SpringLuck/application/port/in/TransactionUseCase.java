@@ -14,4 +14,5 @@ public interface TransactionUseCase {
     Optional<List<Transaction>> getAllTransactions();
     Optional<List<Transaction>> getAllUserTransaction(UUID id);
     Optional<Transaction> getTransactionById(UUID id);
+    void confirmPayment(String intentId,  String userEmail);
 }

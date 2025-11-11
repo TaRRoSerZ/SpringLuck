@@ -1,6 +1,7 @@
 package com.spingluck.SpringLuck.adapter.out.pesistence;
 
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
+import com.spingluck.SpringLuck.application.domain.model.TransactionStatus;
 import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -19,7 +20,9 @@ public class TransactionRowMapper implements RowMapper<Transaction> {
                 rs.getDouble("amount"),
                 rs.getString("bet_id") == null ? null : UUID.fromString(rs.getString("bet_id")),
                 UUID.fromString(rs.getString("user_id")),
+                rs.getString("stripe_intent_id") == null ? null : rs.getString("stripe_intent_id"),
                 TransactionType.valueOf(rs.getString("type")),
+                TransactionStatus.valueOf(rs.getString("status")),
                 rs.getDate("date"));
     }
 }

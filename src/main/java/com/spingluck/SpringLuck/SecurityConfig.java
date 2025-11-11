@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/login", "/users/sync", "/stripe/create-payment-intent", "/stripe/webhook", "/users/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // pour le CORS
                         .anyRequest().authenticated()
                 )

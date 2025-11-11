@@ -4,6 +4,6 @@ public enum TransactionType {
     DEPOSIT,
     BET_PLACED,
     BET_WIN,
-    WITHDRAW,
+    WITHDRAWAL,
     BET_LOSS
 }

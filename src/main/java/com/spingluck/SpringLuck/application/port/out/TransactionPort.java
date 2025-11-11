@@ -2,6 +2,7 @@ package com.spingluck.SpringLuck.application.port.out;
 
 import com.spingluck.SpringLuck.application.domain.model.Bet;
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
+import com.spingluck.SpringLuck.application.domain.model.TransactionStatus;
 import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 
 import java.util.List;
@@ -13,4 +14,7 @@ public interface TransactionPort {
     Optional<List<Transaction>> findTransactionsByUserId(UUID id);
     Optional<Transaction> findById(UUID id);
     Optional<List<Transaction>> findAll();
+    Optional<Transaction> findByStripeIntentId(String intentId);
+    void updateStatusByStripeId(String intentId, TransactionStatus status);
+
 }

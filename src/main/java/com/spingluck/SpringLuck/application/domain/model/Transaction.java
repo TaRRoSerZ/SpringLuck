@@ -14,7 +14,9 @@ public class Transaction {
     private Double amount;
     private UUID betId;
     private UUID userId;
+    private String stripeIntentId;
     private TransactionType type;
+    private TransactionStatus status;
     private Date date;
 }
 
