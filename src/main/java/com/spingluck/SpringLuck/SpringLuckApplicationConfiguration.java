@@ -29,7 +29,7 @@ public class SpringLuckApplicationConfiguration {
 
     @Bean
     TransactionUseCase transactionUseCase() {
-        return new TransactionService(transactionPort);
+        return new TransactionService(transactionPort, userPort);
     }
 
     @Bean

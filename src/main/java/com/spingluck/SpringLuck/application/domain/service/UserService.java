@@ -1,6 +1,7 @@
 package com.spingluck.SpringLuck.application.domain.service;
 
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
+import com.spingluck.SpringLuck.application.domain.model.TransactionStatus;
 import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 import com.spingluck.SpringLuck.application.domain.model.User;
 import com.spingluck.SpringLuck.application.port.in.TransactionUseCase;
@@ -48,10 +49,11 @@ public class UserService implements UserUseCase {
 
     @Override
     public void applyTransaction(User user, TransactionType type, Double amount) {
-        Transaction transaction = new Transaction(UUID.randomUUID(), amount, null, user.getId(), type, new Date());
+        Transaction transaction = new Transaction(UUID.randomUUID(), amount, null, user.getId(), null,
+                type, TransactionStatus.CONFIRMED, new Date());
         double delta = switch (type) {
             case DEPOSIT, BET_WIN -> amount;
-            case WITHDRAW, BET_LOSS, BET_PLACED -> -amount;
+            case WITHDRAWAL, BET_LOSS, BET_PLACED -> -amount;
         };
 
         user.setBalance(user.getBalance() + delta);

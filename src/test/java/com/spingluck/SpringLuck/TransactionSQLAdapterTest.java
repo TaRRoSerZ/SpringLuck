@@ -3,6 +3,7 @@ package com.spingluck.SpringLuck;
 import com.spingluck.SpringLuck.adapter.out.pesistence.TransactionRowMapper;
 import com.spingluck.SpringLuck.adapter.out.pesistence.TransactionSQLAdapter;
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
+import com.spingluck.SpringLuck.application.domain.model.TransactionStatus;
 import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class TransactionSQLAdapterTest {
     TransactionSQLAdapter transactionSQLAdapter;
 
     @Test
-    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
+    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql", "/db/migrations/V7__alterTableTransactions.sql"})
     public void getAllTransactions() {
         Optional<List<Transaction>> transactions;
         transactions = transactionSQLAdapter.findAll();
@@ -66,7 +67,7 @@ public class TransactionSQLAdapterTest {
     }
 
     @Test
-    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
+    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql", "/db/migrations/V7__alterTableTransactions.sql"})
     public void getAllUserTransactions() {
         Optional<List<Transaction>> transactions;
         transactions = transactionSQLAdapter.findTransactionsByUserId(UUID.fromString("380e8400-e29b-41d4-a716-446655440000"));
@@ -82,7 +83,7 @@ public class TransactionSQLAdapterTest {
     }
 
     @Test
-    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
+    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql", "/db/migrations/V7__alterTableTransactions.sql"})
     public void getTransactionById() {
         Optional<Transaction> transactionId2;
         transactionId2 = transactionSQLAdapter.findById(UUID.fromString("260e8400-e29b-41d4-a716-446655440000"));
@@ -100,9 +101,10 @@ public class TransactionSQLAdapterTest {
     }
 
     @Test
-    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql"})
+    @Sql({"/db/migrations/V3__createTransactionTable.sql", "/db/migrations/V4__insertTransactions.sql", "/db/migrations/V7__alterTableTransactions.sql"})
     public void placeTransaction() {
-        Transaction newTransaction = new Transaction(UUID.fromString("900e8400-e29b-41d4-a716-446655440000"), 500.0, null, UUID.fromString("920e8400-e29b-41d4-a716-446655440000"), TransactionType.DEPOSIT, new Date());
+        Transaction newTransaction = new Transaction(UUID.fromString("900e8400-e29b-41d4-a716-446655440000"), 500.0, null,
+                UUID.fromString("270e8400-e29b-41d4-a716-446655440000"),"str_2", TransactionType.DEPOSIT, TransactionStatus.CONFIRMED, new Date());
         transactionSQLAdapter.save(newTransaction);
 
         Optional<Transaction> retrievedTransaction = transactionSQLAdapter.findById(UUID.fromString("900e8400-e29b-41d4-a716-446655440000"));

@@ -44,8 +44,8 @@ public class TransactionController {
     @PostMapping("/create")
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction){
         try {
-            transactionService.createTransaction(transaction);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            Optional<Transaction> createdTransaction = transactionService.createTransaction(transaction);
+            return createdTransaction.map(value -> ResponseEntity.created(null).body(value)).orElseGet(() -> ResponseEntity.notFound().build());
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

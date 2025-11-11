@@ -104,7 +104,7 @@ public class UserServiceTest {
     @CsvSource({
             "DEPOSIT,100.0,150.0",
             "BET_WIN,100.0,150.0",
-            "WITHDRAW,100.0,50.0",
+            "WITHDRAWAL,100.0,50.0",
             "BET_LOSS,100.0,50.0",
             "BET_PLACED,100.0,50.0"
     })

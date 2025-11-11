@@ -131,7 +131,7 @@ public class UserControllerTest {
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/users/transaction")
                 .param("email", "unknown@gmail.com")
-                .param("type", TransactionType.WITHDRAW.name())
+                .param("type", TransactionType.WITHDRAWAL.name())
                 .param("amount", "100.0");
 
         mockMvc.perform(request)
