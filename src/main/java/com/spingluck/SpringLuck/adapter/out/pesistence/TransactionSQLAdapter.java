@@ -44,7 +44,7 @@ public class TransactionSQLAdapter implements TransactionPort {
 
     @Override
     public Optional<List<Transaction>> findTransactionsByUserId(UUID userId) {
-        String sqlQuery = "SELECT * FROM transactions WHERE user_id = ?";
+        String sqlQuery = "SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC";
         return Optional.of(jdbcTemplate.query(sqlQuery, new TransactionRowMapper(), userId));
     }
 
