@@ -26,10 +26,12 @@ public class StripeController {
         try {
             long amount = ((Number) data.get("amount")).longValue();
             String userId = (String) data.get("userId");
+            String userEmail = (String) data.get("userEmail");
 
             PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                     .setCurrency("eur")
                     .setAmount(amount)
+                    .putMetadata("userEmail", userEmail)
                     .build();
 
             PaymentIntent intent = PaymentIntent.create(params);
@@ -65,7 +67,13 @@ public class StripeController {
             Map<String, Object> data = (Map<String, Object>) eventData.get("data");
             Map<String, Object> object = (Map<String, Object>) data.get("object");
             String intentId = (String) object.get("id");
-            String userEmail = (String) object.get("customer");
+
+            String userEmail = null;
+
+            Map<String, Object> metadata = (Map<String, Object>) object.get("metadata");
+            if (metadata != null && metadata.get("userEmail") != null) {
+                userEmail = metadata.get("userEmail").toString();
+            }
 
             transactionService.confirmPayment(intentId, userEmail);
         }
