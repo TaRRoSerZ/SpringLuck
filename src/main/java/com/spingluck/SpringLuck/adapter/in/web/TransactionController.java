@@ -1,14 +1,12 @@
 package com.spingluck.SpringLuck.adapter.in.web;
 
-import com.spingluck.SpringLuck.application.domain.model.Bet;
 import com.spingluck.SpringLuck.application.domain.model.Transaction;
-import com.spingluck.SpringLuck.application.domain.model.TransactionType;
 import com.spingluck.SpringLuck.application.port.in.TransactionUseCase;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
