@@ -59,7 +59,7 @@ public class TransactionSQLAdapter implements TransactionPort {
     @Override
     @Transactional(readOnly = true)
     public Optional<List<Transaction>> findAll() {
-        String sqlQuery = "SELECT * FROM transactions";
+        String sqlQuery = "SELECT * FROM transactions ORDER BY date DESC";
         return Optional.of(jdbcTemplate.query(sqlQuery, new TransactionRowMapper()));
     }
 
