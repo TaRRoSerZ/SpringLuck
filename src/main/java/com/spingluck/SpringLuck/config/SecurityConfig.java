@@ -19,11 +19,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
-        http.oauth2ResourceServer(
-                c -> c.jwt(
-                        j -> j.jwkSetUri(keySetURI)
-                )
-        );
+
 
         // --- Crée le converter JWT personnalisé ---
         var jwtAuthenticationConverter = new JwtAuthenticationConverter();
